@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="../../styles/page.css" />
+</head>
+<body>
+  <div class="addBrand-container" id="member-add-app">
+    <div class="container">
+      <el-form
+        ref="ruleForm"
+        :model="ruleForm"
+        :rules="rules"
+        :inline="false"
+        label-width="180px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="账号:" prop="username">
+          <el-input v-model="ruleForm.username" placeholder="请输入账号" maxlength="20"/>
+        </el-form-item>
+        <el-form-item
+          label="员工姓名:"
+          prop="name"
+        >
+          <el-input
+            v-model="ruleForm.name"
+            placeholder="请输入员工姓名"
+            maxlength="20"
+          />
+        </el-form-item>
+
+        <el-form-item
+          label="手机号:"
+          prop="phone"
+        >
+          <el-input
+            v-model="ruleForm.phone"
+            placeholder="请输入手机号"
+            maxlength="20"
+          />
+        </el-form-item>
+        <el-form-item
+          label="性别:"
+          prop="sex"
+        >
+          <el-radio-group v-model="ruleForm.sex">
+            <el-radio label="男"></el-radio>
+            <el-radio label="女"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item
+          label="身份证号:"
+          prop="idNumber"
+        >
+          <el-input
+            v-model="ruleForm.idNumber"
+            placeholder="请输入身份证号"
+            maxlength="20"
+          />
+        </el-form-item>
+        <div class="subBox address">
+          <el-form-item>
+            <el-button  @click="goBack()">
+              取消
+            </el-button>
+            <el-button
+              type="primary"
+              @click="submitForm('ruleForm', false)">
+              保存
+            </el-button>
+            <el-button
+              v-if="actionType == 'add'"
+              type="primary"
+              class="continue"
+              @click="submitForm('ruleForm', true)">
+              保存并继续添加
+            </el-button>
+          </el-form-item>
+        </div>
+      </el-form>
+    </div>
+  </div>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="../../plugins/vue/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="../../plugins/element-ui/index.js"></script>
+    <!-- 引入axios -->
+    <script src="../../plugins/axios/axios.min.js"></script>
+    <script src="../../js/request.js"></script>
+    <script src="../../api/member.js"></script>
+    <script src="../../js/validate.js"></script>
+    <script src="../../js/index.js"></script>
+    <script>
+      var v = new Vue({
+        el: '#member-add-app',
+        data() {
+          return {
+            id: '',
+            actionType : 'add',
+            ruleForm : {
+                'name': '张三',
+                'phone': '13810081009',
+                'sex': '男',
+                'idNumber': '123456789012345678',
+                username: ''
+            }
+          }
+        },
+        computed: {
+          rules () {
+            return {
+              //账号
+              username: [
+                {
+                  required: true, 'validator': checkUserName, trigger: 'blur'
+                }
+              ],
+              //姓名
+              name: [{ required: true, 'validator': checkName, 'trigger': 'blur' }],
+              'phone': [{ 'required': true, 'validator': checkPhone, 'trigger': 'blur' }],
+              'idNumber': [{ 'required': true, 'validator': validID, 'trigger': 'blur' }]
+            }
+          }
+        },
+        created() {
+         /* this.id = requestUrlParam('id')
+          this.actionType = this.id ? 'edit' : 'add'
+          if (this.id) {
+            this.init()
+          }*/
+
+          //回显数据。
+          var employeeStr = sessionStorage.getItem("employee");
+
+          //如果有值，即表明是从编辑过来的。
+          if(employeeStr){
+            //设置动作类型是 编辑，以便一会在这个页面上点击保存的时候，能够判定到底是添加的动作还是更新的动作。
+            this.actionType = 'edit' ;
+
+            //2. 回显数据。
+            this.ruleForm = JSON.parse(employeeStr);
+            this.ruleForm.sex = this.ruleForm.sex == 1 ? "男" : "女";
+          }
+
+        },
+        mounted() {
+        },
+        methods: {
+          async init () {
+            queryEmployeeById(this.id).then(res => {
+              console.log(res)
+              if (String(res.code) === '1') {
+                console.log(res.data)
+                this.ruleForm = res.data
+                this.ruleForm.sex = res.data.sex === '0' ? '女' : '男'
+                // this.ruleForm.password = ''
+              } else {
+                this.$message.error(res.msg || '操作失败')
+              }
+            })
+          },
+
+          //保存和保存并继续添加执行的方法
+          submitForm (formName, st) {
+            /*
+              this.$refs[formName] ： 用来找到表单对象
+              this.$refs[formName].validate() : 校验表单，点击按钮就先进行校验
+
+              //校验成功或者失败，都会触发 一个方法。 valid: 表示成功或者失败，是 boolean类型
+              this.$refs[formName].validate(function(valid){})
+              this.$refs[formName].validate(valid=>{})
+             */
+            this.$refs[formName].validate((valid) => {
+
+              //如果校验成功！
+              if (valid) {
+                //如果是添加
+                if (this.actionType === 'add') {
+
+                  //准备请求参数
+
+                  //这一段的操作是： 把ruleForm里面的所有字段数据放到一个新的对象里面去。
+                  //后面的单独写的sex, 即表示希望对这份新对象里面的sex字段进行修改。
+                  //  把原来的男 | 女 的值 修改成为 1 | 0
+                  const params = {
+                    ...this.ruleForm,
+                    sex: this.ruleForm.sex === '女' ? '0' : '1'
+                  }
+
+                  //发送请求。
+                  //自己发请求 【请求地址的路径不要乱写，按照原版的来写！】
+
+                  axios.post("/employee" ,params ).then(resp=>{
+                    console.log("添加的结果： ");
+                    console.log(resp);
+
+                    if(resp.data.code){
+                      //成功了
+                      //1. 提示
+                      this.$message.success(resp.data.data);
+
+                      //2. 回到上一个页面或者清空当前的表单继续添加
+                      if(st){
+
+                        //重置数据
+                        this.ruleForm = {
+                          sex:"男"
+                        };
+                      }else{
+
+                        //每隔1秒钟，就执行一次function
+                        //setInterval(function(){} , 1000);
+
+                        //等1秒钟之后，就执行function方法，只会执行一次！
+                        setTimeout(function(){
+                          v.goBack();
+                        } , 1000);
+                      }
+                    }else{
+                      //失败了
+                      this.$message.error(resp.data.msg);
+                    }
+                  })
+
+
+
+                  /*addEmployee(params).then(res => {
+                    if (res.code === 1) {
+                      this.$message.success('员工添加成功！')
+
+                      //添加成功之后还判定了：
+                      if (!st) {
+                        this.goBack()
+                      } else {
+                        this.ruleForm = {
+                          username: '',
+                          'name': '',
+                          'phone': '',
+                          // 'password': '',
+                          // 'rePassword': '',/
+                          'sex': '男',
+                          'idNumber': ''
+                        }
+                      }
+                    } else {
+                      this.$message.error(res.msg || '操作失败')
+                    }
+                  }).catch(err => {
+                    this.$message.error('请求出错了：' + err)
+                  })*/
+                } else { //如果是更新！
+                  const params = {
+                    ...this.ruleForm,
+                    sex: this.ruleForm.sex === '女' ? '0' : '1'
+                  }
+                  editEmployee(params).then(res => {
+                    if (res.code === 1) {
+                      this.$message.success('员工信息修改成功！')
+                      this.goBack()
+                    } else {
+                      this.$message.error(res.msg || '操作失败')
+                    }
+                  }).catch(err => {
+                    this.$message.error('请求出错了：' + err)
+                  })
+                }
+              } else {
+                console.log('error submit!!')
+                return false
+              }
+            })
+          },
+          goBack(){
+            window.parent.menuHandle({
+              id: '2',
+              url: '/backend/page/member/list.html',
+              name: '员工管理'
+            },false)
+          }
+        }
+      })
+    </script>
+</body>
+</html>
