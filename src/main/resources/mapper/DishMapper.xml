@@ -8,10 +8,19 @@
             where name=#{name}
         </if>
     </sql>
+    <insert id="addDish">
+        insert into dish values (#{dish.id},#{dish.name},#{dish.categoryId},#{dish.price},#{dish.code},#{dish.image},#{dish.description},#{dish.status},#{dish.sort}
+        ,#{dish.createTime},#{dish.updateTime},#{id},#{id},#{dish.isDeleted})
+    </insert>
 
-    <select id="getPage" resultType="com.itheima.reggie.bean.Dish">
-        select * from dish
-        <include refid="where"></include>
+    <select id="getPage" resultType="com.itheima.reggie.bean.utilBean.DIshDto">
+        select dish.*,category.name as categoryName from dish,category
+        <where>
+            <if test="name!=null and name!=''">
+                where name=#{name}
+            </if>
+            dish.category_id=category.id
+        </where>
         limit #{setoff},#{pageSize};
     </select>
 
