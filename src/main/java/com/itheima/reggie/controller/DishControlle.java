@@ -33,7 +33,7 @@ public class DishControlle {
     public R<Page<DIshDto>> getPage(HttpServletRequest request){
         int page = Integer.parseInt(request.getParameter("page"));
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
-        String name="";
+        String name = request.getParameter("name");
         R<Page<DIshDto>> result = dishService.getPage(request, page, pageSize,name);
         return result;
     }

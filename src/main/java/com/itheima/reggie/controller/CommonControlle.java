@@ -44,7 +44,7 @@ public class CommonControlle {
         //Resource resource = resourceLoader.getResource("upload/img");
         //获取resources下绝对路径
         ApplicationHome home = new ApplicationHome(this.getClass());
-        String path = home.getDir().getParentFile().getParentFile().getAbsolutePath()+"\\src\\main\\resources\\upload\\zimg";
+        String path = home.getDir().getParentFile().getParentFile().getAbsolutePath()+"\\src\\main\\resources\\upload\\img";
         //String path = resource.getFile().getPath();
         File file = new File(path,name);
         //System.out.println("file.getAbsolutePath() = " + file.getAbsolutePath());
@@ -57,7 +57,7 @@ public class CommonControlle {
         //图片路径
         String name = request.getParameter("name");
         ApplicationHome home = new ApplicationHome(this.getClass());
-        String path = home.getDir().getParentFile().getParentFile().getAbsolutePath()+"\\src\\main\\resources\\upload\\zimg";
+        String path = home.getDir().getParentFile().getParentFile().getAbsolutePath()+"\\src\\main\\resources\\upload\\img";
         try {
             File file = new File(path,name);
             InputStream is = new FileInputStream(file);

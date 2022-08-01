@@ -14,19 +14,30 @@
     </insert>
 
     <select id="getPage" resultType="com.itheima.reggie.bean.utilBean.DIshDto">
-        select dish.*,category.name as categoryName from dish,category
+        select A.*,category.name from
+        (select * from dish
         <where>
-            <if test="name!=null and name!=''">
-                where name=#{name}
+            <if test="name!=null">name=#{name}
             </if>
-            dish.category_id=category.id
-        </where>
-        limit #{setoff},#{pageSize};
+            </where>)as A,category
+            where A.category_id=category.id
+            limit #{setoff},#{pageSize}
+        <!--select dish.*,category.name as categoryName from dish,category-->
+        <!--<where>-->
+        <!--    dish.category_id=category.id-->
+        <!--</where>-->
+        <!--limit #{setoff},#{pageSize};-->
     </select>
 
     <select id="getTotal" resultType="java.lang.Integer">
-        select count(*) from dish
-        <include refid="where"></include>
+        select count(*) from
+        (select * from dish
+        <where>
+            <if test="name!=null">
+            name=#{name}
+            </if>
+        </where>)as A,category
+        where A.category_id=category.id
     </select>
 
 </mapper>
