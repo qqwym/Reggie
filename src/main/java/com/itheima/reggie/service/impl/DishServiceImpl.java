@@ -53,18 +53,89 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         dish.setId(id1);
         int i = mapper.addDish(dish,id);
         int r = 1;
-        for (DishFlavor flavor : dishFlavor) {
-            flavor.setId(id1+ random.nextInt(10));
-            flavor.setCreateTime(LocalDateTime.now());
-            flavor.setUpdateTime(LocalDateTime.now());
-            flavor.setDishId(dish.getId());
-            flavor.setIsDeleted(0);
-            r = dfmapper.addDishFlavor(flavor,id);
+        if (dishFlavor==null){
+            if (i>0){
+                return R.success(1);
+            }
+        }else {
+            for (DishFlavor flavor : dishFlavor) {
+                flavor.setId(id1+ random.nextInt(10));
+                flavor.setUpdateTime(LocalDateTime.now());
+                flavor.setDishId(dish.getId());
+                flavor.setIsDeleted(0);
+                r = dfmapper.editDishFlavor(flavor,id);
+            }
         }
         if (i>0&&r>0){
             return R.success(1);
         }
         return R.error("错误");
     }
+
+    @Override
+    public R<Integer> editDish(HttpServletRequest request, Dish dish, List<DishFlavor> dishFlavors, long id) {
+        Random random = new Random();
+        dish.setUpdateTime(LocalDateTime.now());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        long id1 = Long.parseLong(dateTimeFormatter.format(LocalDateTime.now()));
+        dish.setId(id1);
+        int i = mapper.editDish(dish,id);
+        int r = 1;
+        if (dishFlavors==null){
+            if (i>0){
+                return R.success(1);
+            }
+        }else {
+            for (DishFlavor flavor : dishFlavors) {
+                flavor.setId(id1+ random.nextInt(10));
+                flavor.setUpdateTime(LocalDateTime.now());
+                flavor.setDishId(dish.getId());
+                flavor.setIsDeleted(0);
+                r = dfmapper.editDishFlavor(flavor,id);
+            }
+        }
+        if (i>0&&r>0){
+            return R.success(1);
+        }
+        return R.success(0);
+    }
+
+    @Override
+    public R<Integer> editStatus(HttpServletRequest request, List<Long> ids) {
+        int i = 0;
+        for (Long id : ids) {
+             i += mapper.editStatus(id);
+        }
+        if (i>0){
+            return R.success(i);
+        }
+        return R.error("0");
+    }
+
+    @Override
+    public R<Integer> editStatus1(HttpServletRequest request, List<Long> ids) {
+        int i = 0;
+        for (Long id : ids) {
+            i += mapper.editStatus1(id);
+        }
+        if (i>0){
+            return R.success(i);
+        }
+        return R.error("0");
+    }
+
+    @Override
+    public R<Integer> delete(HttpServletRequest request, List<Long> ids) {
+        int i = 0;
+        for (Long id : ids) {
+            dfmapper.deleteById(id);
+            i += mapper.deleteId(id);
+        }
+        if (i>0){
+            return R.success(i);
+        }
+        return R.error("0");
+    }
+
 
 }

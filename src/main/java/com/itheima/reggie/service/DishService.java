@@ -17,4 +17,12 @@ public interface DishService extends IService<Dish> {
 
     R<Integer> addDish(HttpServletRequest request, Dish dish, List<DishFlavor> dishFlavor,long id);
 
+    R<Integer> editDish(HttpServletRequest request,Dish dish,List<DishFlavor> dishFlavors,long id);
+
+    R<Integer> editStatus(HttpServletRequest request,List<Long> id);
+
+    R<Integer> editStatus1(HttpServletRequest request,List<Long> id);
+
+    R<Integer> delete(HttpServletRequest request,List<Long> id);
+
 }

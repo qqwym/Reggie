@@ -19,5 +19,13 @@ public interface DishMapper extends BaseMapper<Dish>{
 
     int addDish(@Param("dish") Dish dIsh,@Param("id") long id);
 
+    int editDish(@Param("dish") Dish dish,@Param("id") long id);
+
+    int editStatus(long id);
+
+    int editStatus1(long id);
+
+    int deleteId(long id);
+
 
 }
