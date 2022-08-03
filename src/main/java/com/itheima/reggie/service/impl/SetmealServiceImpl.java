@@ -137,5 +137,19 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
         return R.error("0");
     }
 
+    @Override
+    public R<Integer> delete(HttpServletRequest request, List<Long> ids) {
+            int i = 0;
+            for (Long id : ids) {
+                dfmapper.deleteBysetmealId(id);
+                i+=mapper.deleteById(id);
+            }
+            if (i>0){
+                return R.success(i);
+            }
+            return R.error("0");
+
+    }
+
 
 }
