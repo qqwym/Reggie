@@ -27,5 +27,7 @@ public interface DishMapper extends BaseMapper<Dish>{
 
     int deleteId(long id);
 
+    List<Dish> getList(long categotyId);
+
 
 }

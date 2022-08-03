@@ -25,4 +25,6 @@ public interface DishService extends IService<Dish> {
 
     R<Integer> delete(HttpServletRequest request,List<Long> id);
 
+    R<List<Dish>> getList(long id,HttpServletRequest request);
+
 }

@@ -54,6 +54,9 @@
         </where>)as A,category
         where A.category_id=category.id
     </select>
+    <select id="getList" resultType="com.itheima.reggie.bean.Dish">
+        select * from dish where category_id=#{id}
+    </select>
 
 </mapper>
 

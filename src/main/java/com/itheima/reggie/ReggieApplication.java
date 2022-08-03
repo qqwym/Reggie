@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @Slf4j
-@SpringBootApplication
+@SpringBootApplication()
 @MapperScan(basePackages = "com.itheima.reggie.mapper")
 @EnableTransactionManagement
 public class ReggieApplication {

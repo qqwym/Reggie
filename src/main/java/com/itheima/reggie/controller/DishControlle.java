@@ -2,6 +2,7 @@ package com.itheima.reggie.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.itheima.reggie.bean.Category;
 import com.itheima.reggie.bean.Dish;
 import com.itheima.reggie.bean.DishFlavor;
 import com.itheima.reggie.bean.utilBean.DIshDto;
@@ -153,6 +154,13 @@ public class DishControlle {
             ids.add(Long.valueOf(sid));
         }
         return dishService.delete(request, ids);
+    }
+
+    @GetMapping("/list")
+    public R<List<Dish>> gitList(HttpServletRequest request){
+        long id = Long.parseLong(request.getParameter("categoryId"));
+        R<List<Dish>> r = dishService.getList(id, request);
+        return r;
     }
 
 

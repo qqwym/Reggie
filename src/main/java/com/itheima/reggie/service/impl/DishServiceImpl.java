@@ -137,5 +137,11 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         return R.error("0");
     }
 
+    @Override
+    public R<List<Dish>> getList(long id, HttpServletRequest request) {
+        List<Dish> list = mapper.getList(id);
+        return R.success(list);
+    }
+
 
 }
