@@ -88,4 +88,16 @@ public class SetmealControlle {
         return setmealService.editStatus1(request, ids);
     }
 
+    @DeleteMapping("")
+    public R<Integer> deleteSt(HttpServletRequest request){
+        String id = request.getParameter("ids");
+        String[] s = id.split(" ");
+        List<Long> ids = new ArrayList<>();
+        for (String sid : s) {
+            ids.add(Long.valueOf(sid));
+        }
+        return setmealService.delete(request,ids);
+
+    }
+
 }

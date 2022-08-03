@@ -27,4 +27,6 @@ public interface SetmealService extends IService<Setmeal> {
 
     R<Integer> editStatus1(HttpServletRequest request,List<Long> id);
 
+    R<Integer> delete(HttpServletRequest request,List<Long> id);
+
 }
