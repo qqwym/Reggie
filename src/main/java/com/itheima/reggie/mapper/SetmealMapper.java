@@ -15,10 +15,17 @@ import java.util.List;
 public interface SetmealMapper extends BaseMapper<Setmeal> {
 
     //查询
-    List<SetmealDto> getPage(@Param("setoff") int page, @Param("pageSize") int pageSize, @Param("name") String name);
+    List<SetmealDto> getPage(@Param("setoff") int page, @Param("pageSize") int pageSize, @Param("name") String name,@Param("id")long id);
 
     //获取数量
     int getTotal(String name);
 
     int addSetmeal(@Param("setmeal") Setmeal setmeal,@Param("id") long id);
+
+    int editSetmeal(@Param("setmeal") Setmeal setmeal,@Param("id") long id);
+
+    int editStatus(long id);
+
+    int editStatus1(long id);
+
 }

@@ -19,4 +19,12 @@ public interface SetmealService extends IService<Setmeal> {
 
     R<Integer> addSetmeal(HttpServletRequest request, Setmeal setmeal, List<SetmealDish> setmealDish,long id);
 
+    R<SetmealDto> getSetmeal(HttpServletRequest request, long id);
+
+    R<Integer> editSetmeal(HttpServletRequest request,List<SetmealDish> setmealDishes,Setmeal setmeal,long id);
+
+    R<Integer> editStatus(HttpServletRequest request,List<Long> id);
+
+    R<Integer> editStatus1(HttpServletRequest request,List<Long> id);
+
 }

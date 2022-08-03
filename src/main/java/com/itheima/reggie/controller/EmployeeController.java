@@ -74,8 +74,6 @@ public class EmployeeController {
             return result;
         }catch (SqlSessionException e){
             return R.error("登录已失效");
-        }catch (Exception e){
-            return R.error("错误");
         }
     }
 
