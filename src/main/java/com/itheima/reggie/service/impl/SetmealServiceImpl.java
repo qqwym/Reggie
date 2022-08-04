@@ -37,7 +37,7 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
     @Override
     public R<Page<SetmealDto>> getPage(HttpServletRequest request, int page, int pageSize, String name) {
         int setoff = (page-1)*pageSize;
-        List<SetmealDto> dish = mapper.getPage(setoff,pageSize,name);
+        List<SetmealDto> dish = mapper.getPage(setoff,pageSize,name,0);
         int total = mapper.getTotal(name);
         Page<SetmealDto> page1 = new Page<>(dish,total);
         return R.success(page1);
@@ -73,6 +73,82 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
             return R.success(1);
         }
         return R.error("错误");
+    }
+
+    // RestFul 风格
+    // 原始： localhost:8080/aaa/deleteStu?id=3
+    // restful :  localhost:8080/aaa/stu/3
+    // restful  搭配请求方式
+            /*
+                添加 ：  post
+                查询：  get
+                更新：  put
+                删除 : delete
+             */
+    @Override
+    public R<SetmealDto> getSetmeal(HttpServletRequest request, long id) {
+        List<SetmealDto> page = mapper.getPage(0, 1, null, id);
+        SetmealDto setmealDto = page.get(0);
+        setmealDto.setSetmealDishes(dfmapper.getList(setmealDto.getId()));
+        return R.success(setmealDto);
+    }
+
+    @Override
+    public R<Integer> editSetmeal(HttpServletRequest request, List<SetmealDish> setmealDishes, Setmeal setmeal,long id) {
+        int i = dfmapper.deleteBysetmealId(setmeal.getId());
+        Random random = new Random();
+        for (SetmealDish setmealDish : setmealDishes) {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+            long id1 = Long.parseLong(dateTimeFormatter.format(LocalDateTime.now()));
+            setmealDish.setId(id1+ random.nextInt(10));
+            setmealDish.setCreateTime(LocalDateTime.now());
+            setmealDish.setUpdateTime(LocalDateTime.now());
+            setmealDish.setIsDeleted(0);
+            setmealDish.setSort(0);
+            setmealDish.setSetmealId(setmeal.getId());
+            dfmapper.addSetmealDish(setmealDish,id);
+        }
+        setmeal.setUpdateTime(LocalDateTime.now());
+        int i1 = mapper.editSetmeal(setmeal, id);
+        return R.success(i);
+    }
+
+    @Override
+    public R<Integer> editStatus(HttpServletRequest request, List<Long> ids) {
+        int i = 0;
+        for (Long id : ids) {
+            i += mapper.editStatus(id);
+        }
+        if (i>0){
+            return R.success(i);
+        }
+        return R.error("0");
+    }
+
+    @Override
+    public R<Integer> editStatus1(HttpServletRequest request, List<Long> ids) {
+        int i = 0;
+        for (Long id : ids) {
+            i += mapper.editStatus1(id);
+        }
+        if (i>0){
+            return R.success(i);
+        }
+        return R.error("0");
+    }
+
+    @Override
+    public R<Integer> delete(HttpServletRequest request, List<Long> ids) {
+            int i = 0;
+            for (Long id : ids) {
+                dfmapper.deleteBysetmealId(id);
+                i+=mapper.deleteById(id);
+            }
+            if (i>0){
+                return R.success(i);
+            }
+            return R.error("0");
+
     }
 
 

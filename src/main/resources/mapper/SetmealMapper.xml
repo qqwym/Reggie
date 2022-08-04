@@ -9,6 +9,17 @@
         values (#{setmeal.id},#{setmeal.categoryId},#{setmeal.name},#{setmeal.price},#{setmeal.status},#{setmeal.code},#{setmeal.description},
         #{setmeal.image},#{setmeal.createTime},#{setmeal.updateTime},#{id},#{id},#{setmeal.isdeleted})
     </insert>
+    <update id="editSetmeal">
+        update setmeal set category_id=#{setmeal.categoryId},name=#{setmeal.name},price=#{setmeal.price},status=#{setmeal.status},code=#{setmeal.code},
+        description=#{setmeal.description},update_time=#{setmeal.updateTime},update_user=#{id},image=#{setmeal.image}
+        where id=#{setmeal.id}
+    </update>
+    <update id="editStatus">
+        update setmeal set status=0 where id=#{id}
+    </update>
+    <update id="editStatus1">
+        update setmeal set status=1 where id=#{id}
+    </update>
 
     <select id="getPage" resultType="com.itheima.reggie.bean.utilBean.SetmealDto">
         select A.*,category.name as categoryName from
@@ -16,6 +27,9 @@
         <where>
             <if test="name!=null">
             name=#{name}
+            </if>
+            <if test="id!=null and id!=0">
+            id=#{id}
             </if>
         </where>)as A,category
         where A.category_id=category.id
@@ -31,4 +45,5 @@
         </where>)as A,category
         where A.category_id=category.id
     </select>
+
 </mapper>

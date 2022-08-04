@@ -11,4 +11,10 @@
         values (#{setmealDish.id},#{setmealDish.setmealId},#{setmealDish.dishId},#{setmealDish.name},#{setmealDish.price},#{setmealDish.copies},
         #{setmealDish.sort},#{setmealDish.createTime},#{setmealDish.updateTime},#{id},#{id},#{setmealDish.isDeleted})
     </insert>
+    <delete id="deleteBysetmealId">
+        delete from setmeal_dish where setmeal_id=#{id}
+    </delete>
+    <select id="getList" resultType="com.itheima.reggie.bean.SetmealDish">
+        select * from setmeal_dish where setmeal_id=#{id}
+    </select>
 </mapper>

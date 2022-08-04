@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -47,5 +49,55 @@ public class SetmealControlle {
         return r;
     }
 
+    @GetMapping("/{id}")
+    public R<SetmealDto> getSetmeal(@PathVariable long id,HttpServletRequest request){
+        R<SetmealDto> setmeal = setmealService.getSetmeal(request, id);
+        return setmeal;
+    }
+
+    @PutMapping("")
+    public R<Integer> editSetmeal(@RequestBody SetmealDto setmealDto,HttpServletRequest request){
+        List<SetmealDish> setmealDishes = setmealDto.getSetmealDishes();
+        HttpSession session = request.getSession();
+        Object employee = session.getAttribute("employee");
+        long id =Long.parseLong(employee.toString());
+        Setmeal setmeal = setmealDto;
+        R<Integer> r = setmealService.editSetmeal(request, setmealDishes, setmeal,id);
+        return r;
+    }
+
+    @PostMapping("/status/0")
+    public R<Integer> editstatus(HttpServletRequest request) throws IOException {
+        String strids = request.getParameter("ids");
+        String[] sids = strids.split(",");
+        List<Long> ids = new ArrayList<>();
+        for (String sid : sids) {
+            ids.add(Long.valueOf(sid));
+        }
+        return setmealService.editStatus(request, ids);
+    }
+
+    @PostMapping("/status/1")
+    public R<Integer> editStatus1(HttpServletRequest request) throws IOException {
+        String strids = request.getParameter("ids");
+        String[] sids = strids.split(",");
+        List<Long> ids = new ArrayList<>();
+        for (String sid : sids) {
+            ids.add(Long.valueOf(sid));
+        }
+        return setmealService.editStatus1(request, ids);
+    }
+
+    @DeleteMapping("")
+    public R<Integer> deleteSt(HttpServletRequest request){
+        String id = request.getParameter("ids");
+        String[] s = id.split(" ");
+        List<Long> ids = new ArrayList<>();
+        for (String sid : s) {
+            ids.add(Long.valueOf(sid));
+        }
+        return setmealService.delete(request,ids);
+
+    }
 
 }
