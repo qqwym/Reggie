@@ -1,8 +1,6 @@
 package com.itheima.reggie.filter;
 
-import com.itheima.reggie.bean.Employee;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -40,4 +38,4 @@ public class LoginFilter implements Filter {
 
         res.sendRedirect("/backend/page/login/login.html");
     }
-}
+

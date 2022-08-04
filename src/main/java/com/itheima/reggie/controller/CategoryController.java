@@ -124,14 +124,18 @@ public class CategoryController {
     }
     @GetMapping("/list")
     public R<List<ListS>> getList(HttpServletRequest request){
-        int type = Integer.parseInt(request.getParameter("type"));
-        HttpSession session = request.getSession();
-        if (session==null){
-            return R.error("登录已失效");
+        String type1 = request.getParameter("type");
+        if (type1==null){
+            Page<Category> r = categoryService.getPage(request,0,1,0);
+            List<Category> rs = r.getRecords();
+            List<ListS> res =new ArrayList<>();
+            for (Category category : rs) {
+                res.add(new ListS(category.getName(),category.getId()));
+            }
+            return R.success(res);
         }
-        Object oo = session.getAttribute("employee");
+        int type = Integer.parseInt(type1);
         try {
-            long id = Long.parseLong(oo.toString());
             Page<Category> r = categoryService.getPage(request,0,1,type);
             List<Category> rs = r.getRecords();
             List<ListS> res =new ArrayList<>();
