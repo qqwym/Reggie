@@ -12,6 +12,9 @@
             <if test="id!=null">
                 id = #{id}
             </if>
+            <if test="type!=null">
+                type=#{type}
+            </if>
         </where>
     </sql>
 

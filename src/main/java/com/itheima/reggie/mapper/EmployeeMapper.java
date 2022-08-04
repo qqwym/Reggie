@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface EmployeeMapper extends BaseMapper<Employee>{
     //查询
-    List<Employee> getPage(@Param("setoff") int page,@Param("pageSize") int pageSize,@Param("name") String name,@Param("id")Long id);
+    List<Employee> getPage(@Param("setoff") int page,@Param("pageSize") int pageSize,@Param("name") String name,@Param("type")Long type);
 
     //获取数量
     int getTotal(String name);
