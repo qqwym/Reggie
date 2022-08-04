@@ -2,6 +2,8 @@ package com.itheima.reggie.filter;
 
 
 
+import com.itheima.reggie.bean.User;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -22,20 +24,32 @@ public class LoginFilter implements Filter {
         String uri = req.getRequestURI();
         if (uri.contains("login") || uri.contains("images")
                 || uri.contains("plugins") || uri.contains("styles")
-                || uri.endsWith(".js")||uri.endsWith(".ico")){
-            chain.doFilter(request,response);
+                || uri.endsWith(".js") || uri.endsWith(".ico")
+                || uri.contains("sendCode")) {
+            chain.doFilter(request, response);
 
             return;
         }
 
         HttpSession session = req.getSession();
         Object employee = session.getAttribute("employee");
-        if (employee!=null){
+        if (employee != null) {
 
-            chain.doFilter(request,response);
+            chain.doFilter(request, response);
             return;
         }
 
-        res.sendRedirect("/backend/page/login/login.html");
+        User user = (User) session.getAttribute("user");
+        if (user!=null){
+            chain.doFilter(request,response);
+            return;
+        }
+        if (uri.contains("backend")){
+            res.sendRedirect("/backend/page/login/login.html");
+        }else {
+            res.sendRedirect("/front/page/login.html");
+        }
+
     }
+}
 

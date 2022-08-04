@@ -97,7 +97,13 @@ public class SetmealControlle {
             ids.add(Long.valueOf(sid));
         }
         return setmealService.delete(request,ids);
-
     }
+
+    //@GetMapping("/list")
+    //public R getList(HttpServletRequest request){
+    //    String categoryId = request.getParameter("categoryId");
+    //    String status = request.getParameter("status");
+    //
+    //}
 
 }

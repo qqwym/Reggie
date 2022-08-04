@@ -10,13 +10,14 @@ import java.sql.SQLIntegrityConstraintViolationException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    public R handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e){
+    public R handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
         e.printStackTrace();
         String message = e.getMessage();
-        if (message.contains("Duplicate entry")){
+        if (message.contains("Duplicate entry")) {
             String s = message.split(" ")[2];
-            return R.error(s+"已存在");
+            return R.error(s + "已存在");
         }
         return R.error("未知错误");
     }
+}
 
