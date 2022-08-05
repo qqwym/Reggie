@@ -12,4 +12,7 @@
         update dish_flavor set dish_id=#{dishF.dishId},name=#{dishF.name},value=#{dishF.value},update_time=#{dishF.updateTime},update_user=#{dishF.updateUser},isdeleted=#{dishF.isDeleted]}
         where id=#{dishF.id}
     </update>
+    <select id="getDF" resultType="com.itheima.reggie.bean.DishFlavor">
+        select * from dish_flavor where dish_id=#{id}
+    </select>
 </mapper>
