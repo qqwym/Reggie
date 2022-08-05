@@ -1,11 +1,9 @@
 package com.itheima.reggie.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.itheima.reggie.bean.Category;
 import com.itheima.reggie.bean.Dish;
 import com.itheima.reggie.bean.DishFlavor;
-import com.itheima.reggie.bean.utilBean.DIshDto;
+import com.itheima.reggie.bean.utilBean.DishDto;
 import com.itheima.reggie.bean.utilBean.Page;
 import com.itheima.reggie.common.R;
 import com.itheima.reggie.service.DishService;
@@ -13,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -29,11 +26,11 @@ public class DishControlle {
     private DishService dishService;
 
     @GetMapping("/page")
-    public R<Page<DIshDto>> getPage(HttpServletRequest request){
+    public R<Page<DishDto>> getPage(HttpServletRequest request){
         int page = Integer.parseInt(request.getParameter("page"));
         int pageSize = Integer.parseInt(request.getParameter("pageSize"));
         String name = request.getParameter("name");
-        R<Page<DIshDto>> result = dishService.getPage(request, page, pageSize,name);
+        R<Page<DishDto>> result = dishService.getPage(request, page, pageSize,name);
         return result;
     }
 
@@ -54,7 +51,7 @@ public class DishControlle {
                 dish.setSort(0);
                 r = dishService.addDish(request,dish,null,id);
             }else {
-                DIshDto dishd = JSON.parseObject(request.getInputStream(),DIshDto.class);
+                DishDto dishd = JSON.parseObject(request.getInputStream(), DishDto.class);
                 List<DishFlavor> dishf = dishd.getFlavors();
                 Dish dish = dishd;
                 dish.setSort(0);
@@ -70,7 +67,7 @@ public class DishControlle {
     //修改
     @PutMapping
     @ResponseBody
-    public R<Integer> editDish(@RequestBody DIshDto dIshDto,HttpServletRequest request) throws IOException {
+    public R<Integer> editDish(@RequestBody DishDto dIshDto, HttpServletRequest request) throws IOException {
         HttpSession session = request.getSession();
         if (session==null){
             return R.error("登录已失效");
@@ -157,9 +154,9 @@ public class DishControlle {
     }
 
     @GetMapping("/list")
-    public R<List<Dish>> gitList(HttpServletRequest request){
+    public R<List<DishDto>> gitList(HttpServletRequest request){
         long id = Long.parseLong(request.getParameter("categoryId"));
-        R<List<Dish>> r = dishService.getList(id, request);
+        R<List<DishDto>> r = dishService.getList(id, request,1);
         return r;
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DIshDto  extends Dish{
+public class DishDto extends Dish{
     private String categoryName;
     private List<DishFlavor> flavors = new ArrayList<>();
     //private Integer copies;

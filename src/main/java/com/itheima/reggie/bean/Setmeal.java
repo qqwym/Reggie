@@ -2,6 +2,8 @@ package com.itheima.reggie.bean;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,6 +21,7 @@ public class Setmeal implements Serializable {
 
 
     //分类id
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long categoryId;
 
 

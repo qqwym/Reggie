@@ -2,10 +2,11 @@ package com.itheima.reggie.controller;
 
 import com.itheima.reggie.bean.Setmeal;
 import com.itheima.reggie.bean.SetmealDish;
-import com.itheima.reggie.bean.utilBean.DIshDto;
+import com.itheima.reggie.bean.utilBean.DishDto;
 import com.itheima.reggie.bean.utilBean.Page;
 import com.itheima.reggie.bean.utilBean.SetmealDto;
 import com.itheima.reggie.common.R;
+import com.itheima.reggie.service.DishService;
 import com.itheima.reggie.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class SetmealControlle {
 
     @Autowired
     private SetmealService setmealService;
+
+    @Autowired
+    private DishService dishService;
 
 
     @GetMapping("/page")
@@ -99,11 +103,12 @@ public class SetmealControlle {
         return setmealService.delete(request,ids);
     }
 
-    //@GetMapping("/list")
-    //public R getList(HttpServletRequest request){
-    //    String categoryId = request.getParameter("categoryId");
-    //    String status = request.getParameter("status");
-    //
-    //}
+    @GetMapping("/list")
+    public R getList(HttpServletRequest request){
+        String categoryId = request.getParameter("categoryId");
+        String status = request.getParameter("status");
+        R<List<DishDto>> list = dishService.getList(Long.parseLong(categoryId), request, Long.parseLong(status));
+        return list;
+    }
 
 }

@@ -2,7 +2,6 @@ package com.itheima.reggie.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.itheima.reggie.bean.Orders;
-import com.itheima.reggie.bean.utilBean.DIshDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
